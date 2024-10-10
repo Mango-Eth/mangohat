@@ -76,6 +76,13 @@ contract DeterministicToken {
         return _address3(keccak256(abi.encodePacked(_str)));
     }
 
+    // Convenience
+    function address3(
+        bytes32 _salt
+    ) external view returns(address){
+        return _address3(_salt);
+    }
+
     /////////////////////////////////////////////////////
     //              Internal-Pure-Modifier:            //
     /////////////////////////////////////////////////////
