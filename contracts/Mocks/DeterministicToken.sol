@@ -34,6 +34,22 @@ contract DeterministicToken {
         _deploy(address_tkn, bytecode, 0, hash_tkn);
     }
 
+    function deploySingle(
+        string memory _token_Name,
+        string memory _token_Symbol,
+        uint8 _decimal,
+        bytes32 _token_Salt
+    ) external onlyOwner {
+        bytes32 hash_tkn = _token_Salt;
+        address address_tkn = _address3(hash_tkn);
+
+        bytes memory bytecode = type(MockERC20).creationCode;
+        bytes memory args = abi.encode(_token_Name, _token_Symbol, _decimal);
+
+        bytecode = bytes.concat(bytecode, args);
+        _deploy(address_tkn, bytecode, 0, hash_tkn);
+    }
+
     // Head start on stable coins:
     function deploy(
         string memory salt_dai,
