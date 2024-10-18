@@ -72,6 +72,28 @@ library SqrtMath {
         return (dollarAmount * 1e18) / price;
     }
 
+    ///@notice Will return the closes possible tick.
+    ///If the distance between next initializable ticks is equal up or down. It will round up.
+    ///@dev Cant accept 1 as tickspacing. Duh..
+    function roundTick_dir(int24 tick, uint24 tickSpacing) internal pure returns (int24 closest_tick, bool wasRoundedUp, int24 diff) {
+        int24 plus_1 = int24(tickSpacing) / 2;
+
+        if (tick >= 0) {
+            closest_tick = int24(((tick + plus_1 + 1) / int24(tickSpacing)) * int24(tickSpacing));
+            wasRoundedUp = closest_tick > tick;
+            diff = closest_tick - tick;
+        } else {
+            closest_tick = int24(((tick - plus_1 - 1) / int24(tickSpacing)) * int24(tickSpacing));
+            wasRoundedUp = closest_tick < tick;
+            diff = tick - closest_tick;
+        }
+
+        // Always pos
+        if (diff < 0) {
+            diff = -diff;
+        }
+    }
+
     function sqrtu (uint256 x) internal pure returns (uint128) {
         unchecked {
           if (x == 0) return 0;
